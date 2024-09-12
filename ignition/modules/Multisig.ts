@@ -14,5 +14,3 @@ const MultisigModule = buildModule("MultisigModule", (m) => {
 
 export default MultisigModule;
 
-// MultisigModule#Multisig - 0x18D624618ed168a8C205a92202b735523aF738F1
-// MebellieModule#Mcbellie - 0xF6D73AAbB92766c5feC3C7dcE5698FFD0dC44970

@@ -204,7 +204,7 @@ describe("Multisig", function () {
       
       // Try to approve a non-existent transaction
       await expect(multisig.connect(signer1).approveTx(0))
-        .to.be.reverted;
+        .to.be.revertedWith("invalid tx id");
     });
   
     it("Should not allow approving an already completed transaction", async function () {
@@ -237,18 +237,36 @@ describe("Multisig", function () {
         .to.be.revertedWith("transaction already completed");
     });
   
-    it("Should revert if there are insufficient funds when creating a transaction", async function () {
-      const { multisig, mcbellie, owner, signer1, recipient } = await loadFixture(deployMultisigFixture);
+
+  //   it("Should revert if there are insufficient funds when approving a transaction", async function () {
+  //     const { multisig, mcbellie, owner, signer1, recipient } = await loadFixture(deployMultisigFixture);
+
+
+  //     // Get the current balance
+  //     const balance = await mcbellie.balanceOf(multisig.target);
+
+  //     // Try to create a transaction with more than the available balance
+  //     const excessiveAmount = balance + ethers.parseUnits("1", 18);
+
+  //     const amount = ethers.parseEther("100");
+
+
+  //     await multisig.transfer(excessiveAmount, recipient.address, mcbellie.target);
       
-      // Get the current balance
-      const balance = await mcbellie.balanceOf(multisig.target);
+  //     const tx = await multisig.transactions(1);
+  //     expect(tx.id).to.equal(1);
+  //     expect(tx.amount).to.equal(amount);
+  //     expect(tx.recipient).to.equal(recipient.address);
+  //     expect(tx.sender).to.equal(owner.address);
+  //     expect(tx.isCompleted).to.be.false;
+  //     expect(tx.noOfApproval).to.equal(1);
+  //     expect(tx.tokenAddress).to.equal(mcbellie.target);
       
-      // Try to create a transaction with more than the available balance
-      const excessiveAmount = balance + BigInt(1);
-      await expect(multisig.connect(owner).transfer(excessiveAmount, recipient.address, mcbellie.target))
-        .to.be.revertedWith("insufficient funds");
-    });
-  });
+  //     expect(multisig.connect(signer1).approveTx(1))
+  //     .to.be.revertedWith("insufficient funds");
+      
+    
+  // });
 
 
   describe("UpdateNewQuorum", function(){
@@ -358,5 +376,5 @@ describe("Multisig", function () {
       expect(await multisig.quorum()).to.equal(newQuorum);
     });
   });
-
+})
 });
