@@ -1,6 +1,7 @@
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { token } from "../typechain-types/@openzeppelin/contracts";
 
 describe("Multisig", function () {
   async function deployMultisigFixture() {
@@ -238,35 +239,34 @@ describe("Multisig", function () {
     });
   
 
-  //   it("Should revert if there are insufficient funds when approving a transaction", async function () {
-  //     const { multisig, mcbellie, owner, signer1, recipient } = await loadFixture(deployMultisigFixture);
+    it("Should revert if there are insufficient funds when approving a transaction", async function () {
+      const { multisig, mcbellie, owner, signer1, recipient } = await loadFixture(deployMultisigFixture);
 
 
-  //     // Get the current balance
-  //     const balance = await mcbellie.balanceOf(multisig.target);
 
-  //     // Try to create a transaction with more than the available balance
-  //     const excessiveAmount = balance + ethers.parseUnits("1", 18);
+      // Get the current balance
+      const balance = await mcbellie.balanceOf(multisig.target);
 
-  //     const amount = ethers.parseEther("100");
+      // Try to create a transaction with more than the available balance
+      const txAmount =  ethers.parseUnits("1000", 18);
+      const txAmount1 =  ethers.parseUnits("1000", 18);
 
 
-  //     await multisig.transfer(excessiveAmount, recipient.address, mcbellie.target);
+
+      await multisig.transfer(txAmount, recipient.address, mcbellie.target);
+      await multisig.transfer(txAmount1, recipient.address, mcbellie.target);
       
-  //     const tx = await multisig.transactions(1);
-  //     expect(tx.id).to.equal(1);
-  //     expect(tx.amount).to.equal(amount);
-  //     expect(tx.recipient).to.equal(recipient.address);
-  //     expect(tx.sender).to.equal(owner.address);
-  //     expect(tx.isCompleted).to.be.false;
-  //     expect(tx.noOfApproval).to.equal(1);
-  //     expect(tx.tokenAddress).to.equal(mcbellie.target);
       
-  //     expect(multisig.connect(signer1).approveTx(1))
-  //     .to.be.revertedWith("insufficient funds");
+      await expect(multisig.connect(signer1).approveTx(1))
+      await expect(multisig.connect(owner).approveTx(1))
+
+      await expect(multisig.connect(signer1).approveTx(2))
+      await expect(multisig.connect(owner).approveTx(2))
+      .to.be.revertedWith("insufficient funds")
+     
       
     
-  // });
+  });
 
 
   describe("UpdateNewQuorum", function(){
